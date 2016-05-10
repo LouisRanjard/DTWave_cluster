@@ -1,0 +1,211 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>calc_mfcc - Emulation of HTK's MFCC calculation</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-05-18"><meta name="DC.source" content="demo_calc_mfcc.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><a href="http://labrosa.ee.columbia.edu/">LabROSA</a> : <a href="http://labrosa.ee.columbia.edu/projects/">Projects</a>: <div class="content"> <IMG SRC="calc_mfcc_thumb.png" ALIGN="LEFT" HSPACE="10"><h1>calc_mfcc - Emulation of HTK's MFCC calculation</h1><!--introduction--><p><tt>calc_mfcc</tt> is a (compiled) Matlab script that calculates MFCC features, attempting to duplicate a particular configuration of MFCC's HCopy.</p><p>The code is based on my <a href="http://labrosa.ee.columbia.edu/matlab/rastamat/">rastamat</a> package that attempts to mimic a lot of well-known MFCC variants, but this version has a few extra tweaks to make it closer to HTK output.</p><p>The specific HTK configuration we're aiming to copy is this:</p><pre> TARGETRATE = 100000.0
+ SOURCEFORMAT = WAV
+ TARGETKIND = MFCC_0_D_A_Z
+ ENORMALISE = T
+ USEPOWER = T
+ ZMEANSOURCE = T
+ SAVECOMPRESSED = T
+ SAVEWITHCRC = T
+ USEHAMMING = T
+ WINDOWSIZE = 250000.0
+ CEPLIFTER = 22
+ NUMCHANS = 26
+ NUMCEPS = 12
+ BYTEORDER = VAX
+ PREEMCOEF = 0.97</pre><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Example Usage</a></li><li><a href="#2">Installation</a></li><li><a href="#3">Changelog</a></li><li><a href="#4">Acknowledgment</a></li></ul></div><h2>Example Usage<a name="1"></a></h2><p>The Matlab script can be run from the Matlab prompt, or using the included Unix shell wrapper, run_calc_mfcc.sh:</p><pre class="codeinput"><span class="comment">% Run it over our demo file</span>
+calc_mfcc <span class="string">test.wav</span> <span class="string">test.out</span>
+<span class="comment">% Plot the result</span>
+d = textread(<span class="string">'test.out'</span>);
+subplot(311)
+imagesc(d(:,3:end)'); axis <span class="string">xy</span>
+colorbar
+<span class="comment">% Compare to HTK output</span>
+h = textread(<span class="string">'test-htk.out'</span>);
+subplot(312)
+imagesc(h(:,3:end)'); axis <span class="string">xy</span>
+colorbar
+<span class="comment">% and difference</span>
+subplot(313)
+imagesc(h(:,3:end)'-d(:,3:end)'); axis <span class="string">xy</span>
+colorbar
+<span class="comment">% Quantify</span>
+mean(mean(abs(h(:,3:end)-d(:,3:end))))/mean(mean(abs(h(:,3:end))))
+</pre><pre class="codeoutput">
+ans =
+
+   2.9091e-05
+
+</pre><img vspace="5" hspace="5" src="demo_calc_mfcc_01.png" alt=""> <h2>Installation<a name="2"></a></h2><p>This package has been compiled for several targets using the Matlab compiler.  You will also need to download and install the Matlab Compiler Runtime (MCR) Installer. Please see the table below:</p><p>
+<table border=1>
+<tr><th>Architecture</th><th>Compiled package</th><th>MCR Installer</th></tr>
+<tr><td>64 bit Linux</td>
+<td><a href="calc_mfcc_GLNXA64.zip">calc_mfcc_GLNXA64.zip</a></td>
+<td><a href="http://www.ee.columbia.edu/~dpwe/tmp/MCRInstaller_glnxa64.bin">Linux 64 bit MCR Installer</a></td></tr>
+<tr><td>64 bit MacOS</td>
+<td><a href="calc_mfcc_MACI64.zip">calc_mfcc_MACI64.zip</a></td>
+<td><a href="http://www.ee.columbia.edu/~dpwe/tmp/MCRInstaller.dmg">MACI64 MCR Installer</a></td></tr>
+</table></p><p>The original Matlab code used to build this compiled target is available at <a href="http://labrosa.ee.columbia.edu/projects/calc_mfcc/">http://labrosa.ee.columbia.edu/projects/calc_mfcc/</a></p><p>All sources and data files are in the package <a href="calc_mfcc-v0.1.zip">calc_mfcc-v0.1.zip</a>.</p><p>Feel free to contact me with any problems.</p><h2>Changelog<a name="3"></a></h2><pre class="codeinput"><span class="comment">% 2013-02-26 v0.1 Initial release</span>
+<span class="comment">%</span>
+</pre><h2>Acknowledgment<a name="4"></a></h2><p>This work was supported by DARPA under the RATS program via a subcontract from the SRI-led team SCENIC.  My work was on behalf of ICSI.</p><p>$Header: /Users/drspeech/data/RATS/code/calc_mfcc/RCS/demo_calc_mfcc.m,v 1.1 2013/02/26 13:35:11 dpwe Exp dpwe $</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% calc_mfcc - Emulation of HTK's MFCC calculation
+%
+% |calc_mfcc| is a (compiled) Matlab script that calculates MFCC
+% features, attempting to duplicate a particular configuration of 
+% MFCC's HCopy.  
+%
+% The code is based on my 
+% <http://labrosa.ee.columbia.edu/matlab/rastamat/ rastamat>
+% package that attempts to mimic a lot of well-known MFCC variants,
+% but this version has a few extra tweaks to make it closer to HTK
+% output.
+%
+% The specific HTK configuration we're aiming to copy is this:
+%
+%   TARGETRATE = 100000.0
+%   SOURCEFORMAT = WAV
+%   TARGETKIND = MFCC_0_D_A_Z
+%   ENORMALISE = T
+%   USEPOWER = T
+%   ZMEANSOURCE = T
+%   SAVECOMPRESSED = T
+%   SAVEWITHCRC = T
+%   USEHAMMING = T
+%   WINDOWSIZE = 250000.0
+%   CEPLIFTER = 22
+%   NUMCHANS = 26
+%   NUMCEPS = 12
+%   BYTEORDER = VAX
+%   PREEMCOEF = 0.97
+
+%% Example Usage
+%
+% The Matlab script can be run from the Matlab prompt, or using the 
+% included Unix shell wrapper, run_calc_mfcc.sh:
+
+% Run it over our demo file
+calc_mfcc test.wav test.out
+% Plot the result
+d = textread('test.out');
+subplot(311)
+imagesc(d(:,3:end)'); axis xy
+colorbar
+% Compare to HTK output
+h = textread('test-htk.out');
+subplot(312)
+imagesc(h(:,3:end)'); axis xy
+colorbar
+% and difference
+subplot(313)
+imagesc(h(:,3:end)'-d(:,3:end)'); axis xy
+colorbar
+% Quantify
+mean(mean(abs(h(:,3:end)-d(:,3:end))))/mean(mean(abs(h(:,3:end))))
+
+%% Installation
+% 
+% This package has been compiled for several targets 
+% using the Matlab compiler.  You will also need 
+% to download and install the Matlab Compiler Runtime (MCR) Installer. 
+% Please see the table below:
+%
+% <html>
+% <table border=1>
+% <tr><th>Architecture</th><th>Compiled package</th><th>MCR Installer</th></tr>
+% <tr><td>64 bit Linux</td>
+% <td><a href="calc_mfcc_GLNXA64.zip">calc_mfcc_GLNXA64.zip</a></td>
+% <td><a href="http://www.ee.columbia.edu/~dpwe/tmp/MCRInstaller_glnxa64.bin">Linux 64 bit MCR Installer</a></td></tr>
+% <tr><td>64 bit MacOS</td>
+% <td><a href="calc_mfcc_MACI64.zip">calc_mfcc_MACI64.zip</a></td>
+% <td><a href="http://www.ee.columbia.edu/~dpwe/tmp/MCRInstaller.dmg">MACI64 MCR Installer</a></td></tr>
+% </table></html>
+%
+% The original Matlab code used to build this compiled target is 
+% available at <http://labrosa.ee.columbia.edu/projects/calc_mfcc/>
+%
+% All sources and data files are in the package <calc_mfcc-v0.1.zip>.
+%
+% Feel free to contact me with any problems.
+%
+
+%% Changelog
+%
+
+% 2013-02-26 v0.1 Initial release
+%
+
+%% Acknowledgment
+%
+% This work was supported by DARPA under the RATS program via a 
+% subcontract from the SRI-led team SCENIC.  My work was on behalf 
+% of ICSI.
+%
+% $Header: /Users/drspeech/data/RATS/code/calc_mfcc/RCS/demo_calc_mfcc.m,v 1.1 2013/02/26 13:35:11 dpwe Exp dpwe $
+
+##### SOURCE END #####
+--></body></html>

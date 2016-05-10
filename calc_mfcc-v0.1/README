@@ -1,0 +1,5 @@
+README for calc_mfcc
+
+This is a quick compiled matlab target to emulate HCopy's MFCC calculation.
+
+2013-02-26 Dan Ellis dpwe@ee.columbia.edu

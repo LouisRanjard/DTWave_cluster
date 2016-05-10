@@ -1,0 +1,17 @@
+# build the standalone application from Matlab
+
+Only to include the toolboxes:
+- Image Processing Toolbox
+- Signal Processing Toolbox
+- Statistics Toolbox
+
+
+# to run the app on Linux
+cd ~/Documents/DTWave/DTWave_cluster_pkg/
+./run_dtwave_cluster.sh /home/louis/MATLAB/MATLAB_Compiler_Runtime/v81/ ./data 'wintime' 0.05 'hoptime' 0.02 'nrepeat' 2
+
+
+# to run the app on Windows
+Start -> run -> CMD
+dtwave_cluster.exe  D:\data wintime 0.05 hoptime 0.02 nrepeat 2
+
